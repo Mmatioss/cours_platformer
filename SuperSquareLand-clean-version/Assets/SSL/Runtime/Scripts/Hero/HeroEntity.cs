@@ -2,9 +2,11 @@ using UnityEngine;
 
 public class HeroEntity : MonoBehaviour
 {
+#region Setup Physics
     [Header("Physics")]
     [SerializeField] private Rigidbody2D _rigidbody;
-
+#endregion
+#region Setup Movements
     [Header("Horizontal Movements")]
     [SerializeField] private HeroHorizontalMovementsSettings _movementsSettings;
     private float _horizontalSpeed = 0f;
@@ -12,19 +14,23 @@ public class HeroEntity : MonoBehaviour
     [Header("Vertical Movements")]
     private float _verticalSpeed =0f;
     [SerializeField] private HeroDashSettings _DashSettings;
-
+#endregion
+#region Setup Fall/Ground
     [Header("Fall")]
     [SerializeField] private HeroFallSettings _fallSettings;
     [Header("Ground")]
     [SerializeField] private GroundDetector _groundDetector;
     public bool IsTouchingGround {get; private set;} = false;
+#endregion
+#region Setup Orientation
     [Header("Orientation")]
     [SerializeField] private Transform _orientVisualRoot;
     private float _orientX = 1f;
-
+#endregion
+#region Setup Debug
     [Header("Debug")]
     [SerializeField] private bool _guiDebug = false;
-
+#endregion
 #region Functions move Dir
     public void SetMoveDirX(float dirX)
     {
@@ -78,6 +84,7 @@ public class HeroEntity : MonoBehaviour
         }
     }
 #endregion
+#region Functions Horizontal Speed
     private bool _AreOrientAndMovementOpposite()
     {
         return _moveDirX * _orientX < 0f;
@@ -105,13 +112,16 @@ public class HeroEntity : MonoBehaviour
         velocity.x = _horizontalSpeed * _orientX;
         _rigidbody.velocity = velocity;
     }
+#endregion
+#region Functions Dash 
     public void Dash()
     {
         Vector2 velocity = _rigidbody.velocity;
         velocity.x = _DashSettings.Speed * _orientX;
         _rigidbody.velocity = velocity;
     }
-    
+#endregion
+#region Functions Update
     private void Update()
     {
         _UpdateOrientVisual();
@@ -123,7 +133,7 @@ public class HeroEntity : MonoBehaviour
         newScale.x = _orientX;
         _orientVisualRoot.localScale = newScale;
     }
-
+#endregion
 #region Functions fall
     private void _ApplyFallGravity()
     {
@@ -151,6 +161,7 @@ public class HeroEntity : MonoBehaviour
         _verticalSpeed = 0f;
     }
 #endregion
+#region Functions debugGUI
     private void OnGUI()
     {
         if (!_guiDebug) return;
@@ -168,4 +179,5 @@ public class HeroEntity : MonoBehaviour
         GUILayout.Label(text:$"Vertical Speed = {_verticalSpeed}");
         GUILayout.EndVertical();
     }
+#endregion
 }
