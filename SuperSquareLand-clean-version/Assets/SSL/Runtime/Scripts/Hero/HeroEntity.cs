@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class HeroEntity : MonoBehaviour
 {
+#region Setup
 #region Setup Physics
     [Header("Physics")]
     [SerializeField] private Rigidbody2D _rigidbody;
@@ -46,8 +47,9 @@ public class HeroEntity : MonoBehaviour
     [Header("Debug")]
     [SerializeField] private bool _guiDebug = false;
 #endregion
+#endregion
 
-
+#region Function
 #region Functions Jump
     public void JumpStart()
     {
@@ -55,6 +57,13 @@ public class HeroEntity : MonoBehaviour
         _jumpTimer = 0f;
     }
 
+    public void StopJumpImpulsion()
+    {
+        _jumpState = JumpState.Falling;
+    }
+
+    public bool IsJumpImpulsing => _jumpState == JumpState.JumpImpulsion;
+    public bool IsJumpMinDurationReached => _jumpTimer >= _jumpSettings.jumpMinDuration;
     public bool IsJumping => _jumpState != JumpState.NotJumping;
 #endregion
 #region Functions move Dir
@@ -245,5 +254,6 @@ public class HeroEntity : MonoBehaviour
         GUILayout.Label(text:$"Vertical Speed = {_verticalSpeed}");
         GUILayout.EndVertical();
     }
+#endregion
 #endregion
 }

@@ -860,6 +860,7 @@ MonoBehaviour:
   _groundDetector: {fileID: 4817308626512544918}
   _jumpSettings:
     jumpSpeed: 8
+    jumpMinDuration: 0.01
     jumpMaxDuration: 0.25
   _jumpFallSettings:
     fallGravity: 60

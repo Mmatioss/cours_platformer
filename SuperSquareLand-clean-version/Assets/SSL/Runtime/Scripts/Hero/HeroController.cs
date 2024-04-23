@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class HeroController : MonoBehaviour
 {
+#region Setup
 #region Setup Entity
     [Header("Entity")]
     [SerializeField] private HeroEntity _entity;
@@ -10,8 +11,10 @@ public class HeroController : MonoBehaviour
     [Header("Debug")]
     [SerializeField] private bool _guiDebug = false;
 #endregion
+#endregion
 
-#region fonctions Update
+#region Functions
+#region FUnctions Update
     private void Update()
     {
         _entity.SetMoveDirX(GetInputMoveX());
@@ -22,6 +25,14 @@ public class HeroController : MonoBehaviour
             {
                 _entity.JumpStart();
             
+            }
+        }
+
+        if (_entity.IsJumpImpulsing)
+        {
+            if (!_GetInputJump() && _entity.IsJumpMinDurationReached)
+            {
+                _entity.StopJumpImpulsion();
             }
         }
     }
@@ -56,6 +67,11 @@ public class HeroController : MonoBehaviour
     {
         return Input.GetKeyDown(KeyCode.Space);
     }
+
+    private bool _GetInputJump()
+    {
+        return Input.GetKey(KeyCode.Space);
+    }
 #endregion
 #region Functions DebugGUI
     private void OnGUI()
@@ -66,5 +82,6 @@ public class HeroController : MonoBehaviour
         GUILayout.Label(gameObject.name);
         GUILayout.EndVertical();
     }
+#endregion
 #endregion
 }
