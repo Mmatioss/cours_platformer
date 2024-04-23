@@ -31,13 +31,6 @@ public class HeroEntity : MonoBehaviour
     [Header("Debug")]
     [SerializeField] private bool _guiDebug = false;
 #endregion
-#region Functions move Dir
-    public void SetMoveDirX(float dirX)
-    {
-        _moveDirX = dirX;
-    }
-#endregion
-
 
     private void FixedUpdate()
     {
@@ -59,6 +52,13 @@ public class HeroEntity : MonoBehaviour
         _ApplyHorizontalSpeed();
         _ApplyVerticalSpeed();
     }
+
+#region Functions move Dir
+    public void SetMoveDirX(float dirX)
+    {
+        _moveDirX = dirX;
+    }
+#endregion
 #region Functions move smooth
     private void _Accelerate()
     {
