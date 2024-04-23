@@ -29,6 +29,13 @@ public class HeroController : MonoBehaviour
         return inputMoveX;
     }
 
+    private void GetInputDash()
+    {
+        if (Input.GetKeyDown(KeyCode.E)){
+            _entity.Dash();
+        }
+    }
+
     private void OnGUI()
     {
         if (!_guiDebug) return;
