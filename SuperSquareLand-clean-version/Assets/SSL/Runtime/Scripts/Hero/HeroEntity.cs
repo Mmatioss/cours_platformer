@@ -22,6 +22,21 @@ public class HeroEntity : MonoBehaviour
     [SerializeField] private GroundDetector _groundDetector;
     public bool IsTouchingGround {get; private set;} = false;
 #endregion
+#region Setup Jump
+    [Header("Jump")]
+    [SerializeField] private HeroJumpSettings _jumpSettings;
+    [SerializeField] private HeroFallSettings _jumpFallSettings;
+
+    enum JumpState
+    {
+        NotJumping,
+        JumpImpulsion,
+        Falling
+    }
+
+    private JumpState _jumpState = JumpState.NotJumping;
+    private float _jumpTimer = 0f;
+#endregion
 #region Setup Orientation
     [Header("Orientation")]
     [SerializeField] private Transform _orientVisualRoot;
@@ -32,27 +47,16 @@ public class HeroEntity : MonoBehaviour
     [SerializeField] private bool _guiDebug = false;
 #endregion
 
-    private void FixedUpdate()
-    {
-        _ApplyGroundDetection();
 
-        if (_AreOrientAndMovementOpposite())
-        {
-            _TurnBack();
-        }else{
-            _UpdateHorizontalSpeed();
-            _ChangeOrientFromHorizontalMovement();
-        }
-        if(!IsTouchingGround)
-        {
-            _ApplyFallGravity();
-        }else{
-            _ResetVerticalSpeed();
-        }
-        _ApplyHorizontalSpeed();
-        _ApplyVerticalSpeed();
+#region Functions Jump
+    public void JumpStart()
+    {
+        _jumpState = JumpState.JumpImpulsion;
+        _jumpTimer = 0f;
     }
 
+    public bool IsJumping => _jumpState != JumpState.NotJumping;
+#endregion
 #region Functions move Dir
     public void SetMoveDirX(float dirX)
     {
@@ -127,20 +131,81 @@ public class HeroEntity : MonoBehaviour
         _UpdateOrientVisual();
     }
 
+    private void FixedUpdate()
+    {
+        _ApplyGroundDetection();
+
+        if (_AreOrientAndMovementOpposite())
+        {
+            _TurnBack();
+        }else{
+            _UpdateHorizontalSpeed();
+            _ChangeOrientFromHorizontalMovement();
+        }
+        if (IsJumping)
+        {
+            _UpdateJump();
+        }else{
+            if(!IsTouchingGround)
+            {
+                _ApplyFallGravity(_fallSettings);
+            }else{
+                _ResetVerticalSpeed();
+            }
+        }
+
+        _ApplyHorizontalSpeed();
+        _ApplyVerticalSpeed();
+    }
+
     private void _UpdateOrientVisual()
     {
         Vector3 newScale = _orientVisualRoot.localScale;
         newScale.x = _orientX;
         _orientVisualRoot.localScale = newScale;
     }
+    #region UpdateJump
+    private void _UpdateJumpStateImpulsion()
+    {
+        _jumpTimer += Time.fixedDeltaTime;
+        if (_jumpTimer < _jumpSettings.jumpMaxDuration) {
+            _verticalSpeed = _jumpSettings.jumpSpeed;
+        }else{
+            _jumpState = JumpState.Falling;
+        }
+    }
+
+    private void _UpdateJumpStateFalling()
+    {
+        if (!IsTouchingGround){
+            _ApplyFallGravity(_jumpFallSettings);
+        }else{
+            _ResetVerticalSpeed();
+            _jumpState = JumpState.NotJumping;
+        }
+    }
+
+    private void _UpdateJump()
+    {
+        switch (_jumpState){
+            case JumpState.JumpImpulsion:
+                _UpdateJumpStateImpulsion();
+                break;
+            
+            case JumpState.Falling:
+                _UpdateJumpStateFalling();
+                break;
+        }
+    }
+    #endregion
 #endregion
 #region Functions fall
-    private void _ApplyFallGravity()
+    private void _ApplyFallGravity(HeroFallSettings settings)
     {
-        _verticalSpeed -= _fallSettings.fallGravity * Time.fixedDeltaTime;
-        if (_verticalSpeed < -_fallSettings.fallSpeedMax)
+        _verticalSpeed -= settings.fallGravity * Time.fixedDeltaTime;
+        if (_verticalSpeed < -settings.fallSpeedMax)
         {
-            _verticalSpeed = -_fallSettings.fallSpeedMax;
+            _verticalSpeed = -settings.fallSpeedMax;
         }
     }
 
@@ -175,6 +240,7 @@ public class HeroEntity : MonoBehaviour
         }else{
             GUILayout.Label(text:"InAir");
         }
+        GUILayout.Label(text:$"JumpingState = {_jumpState}");
         GUILayout.Label(text:$"Horizontal Speed = {_horizontalSpeed}");
         GUILayout.Label(text:$"Vertical Speed = {_verticalSpeed}");
         GUILayout.EndVertical();

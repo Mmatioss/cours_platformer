@@ -2,17 +2,31 @@ using UnityEngine;
 
 public class HeroController : MonoBehaviour
 {
+#region Setup Entity
     [Header("Entity")]
     [SerializeField] private HeroEntity _entity;
-
+#endregion
+#region Setup Debug
     [Header("Debug")]
     [SerializeField] private bool _guiDebug = false;
+#endregion
 
+#region fonctions Update
     private void Update()
     {
         _entity.SetMoveDirX(GetInputMoveX());
-    }
 
+        if (_GetInputDownJump())
+        {
+            if (_entity.IsTouchingGround && !_entity.IsJumping)
+            {
+                _entity.JumpStart();
+            
+            }
+        }
+    }
+#endregion
+#region Functions MoveX
     private float GetInputMoveX()
     {
         float inputMoveX = 0f;
@@ -28,14 +42,22 @@ public class HeroController : MonoBehaviour
 
         return inputMoveX;
     }
-
+#endregion
+#region Functions Dash
     private void GetInputDash()
     {
         if (Input.GetKeyDown(KeyCode.E)){
             _entity.Dash();
         }
     }
-
+#endregion
+#region Functions Jump
+    private bool _GetInputDownJump()
+    {
+        return Input.GetKeyDown(KeyCode.Space);
+    }
+#endregion
+#region Functions DebugGUI
     private void OnGUI()
     {
         if (!_guiDebug) return;
@@ -44,4 +66,5 @@ public class HeroController : MonoBehaviour
         GUILayout.Label(gameObject.name);
         GUILayout.EndVertical();
     }
+#endregion
 }

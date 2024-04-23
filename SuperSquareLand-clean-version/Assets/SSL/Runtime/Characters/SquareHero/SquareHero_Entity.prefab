@@ -858,6 +858,12 @@ MonoBehaviour:
     fallGravity: 20
     fallSpeedMax: 10
   _groundDetector: {fileID: 4817308626512544918}
+  _jumpSettings:
+    jumpSpeed: 8
+    jumpMaxDuration: 0.25
+  _jumpFallSettings:
+    fallGravity: 60
+    fallSpeedMax: 20
   _orientVisualRoot: {fileID: 3024582456938629764}
   _guiDebug: 1
 --- !u!114 &4817308626512544918
