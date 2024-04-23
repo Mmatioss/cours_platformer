@@ -822,7 +822,7 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 0
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 3aa90e189c58491468a67afb3329e400, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -847,10 +847,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rigidbody: {fileID: 7212136366118121974}
   _movementsSettings:
-    acceleration: 20
-    deceleration: 15
-    turnBackFriction: 25
-    speedMax: 5
+    acceleration: 25
+    deceleration: 20
+    turnBackFriction: 30
+    speedMax: 7
   _DashSettings:
     Speed: 40
     Duration: 0.1
