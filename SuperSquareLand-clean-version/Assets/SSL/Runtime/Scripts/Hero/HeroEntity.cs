@@ -17,7 +17,6 @@ public class HeroEntity : MonoBehaviour
     private float _moveDirX = 0f;
     [Header("Vertical Movements")]
     private float _verticalSpeed =0f;
-    [SerializeField] private HeroDashSettings _DashSettings;
 #endregion
 #region Setup Fall/Ground
     [Header("Fall")]
@@ -25,6 +24,12 @@ public class HeroEntity : MonoBehaviour
     [Header("Ground")]
     [SerializeField] private GroundDetector _groundDetector;
     public bool IsTouchingGround {get; private set;} = false;
+#endregion
+#region Setup Dash
+    [Header("Dash")]
+    [SerializeField] private HeroDashSettings _DashSettings;
+    private bool _isDashing = false;
+    private float _dashTimer = 0f;
 #endregion
 #region Setup Jump
     [Header("Jump")]
@@ -135,9 +140,10 @@ public class HeroEntity : MonoBehaviour
     }
 #endregion
 #region Functions Dash 
-    public void Dash()
+    public void DashStart()
     {
-        _horizontalSpeed = _DashSettings.Speed;
+        _isDashing = true;
+        _dashTimer = 0f;
     }
 
     private void _StopDash()
@@ -174,7 +180,6 @@ public class HeroEntity : MonoBehaviour
                 _ResetVerticalSpeed();
             }
         }
-
         _ApplyHorizontalSpeed();
         _ApplyVerticalSpeed();
     }
@@ -185,6 +190,23 @@ public class HeroEntity : MonoBehaviour
         newScale.x = _orientX;
         _orientVisualRoot.localScale = newScale;
     }
+    
+    #region UpdateDash
+    private void _UpdateDash()
+    {
+        if (_isDashing)
+        {
+            _dashTimer += Time.fixedDeltaTime;
+            if (_dashTimer < _DashSettings.Duration)
+            {
+                _horizontalSpeed = _DashSettings.Speed * _orientX;
+            }else{
+                _isDashing = false;
+                _StopDash();
+            }
+        }
+    }
+    #endregion
     #region UpdateJump
     private void _UpdateJumpStateImpulsion()
     {

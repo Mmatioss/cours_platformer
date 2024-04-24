@@ -1,3 +1,4 @@
+using System.Xml;
 using UnityEngine;
 
 public class HeroController : MonoBehaviour
@@ -6,6 +7,11 @@ public class HeroController : MonoBehaviour
 #region Setup Entity
     [Header("Entity")]
     [SerializeField] private HeroEntity _entity;
+#endregion
+#region Setup Jump Buffer
+    [Header("Jump Buffer")]
+    [SerializeField] private float _jumpBufferDuration = 0.2f;
+    private float _jumpBufferTimer = 0f;
 #endregion
 #region Setup Debug
     [Header("Debug")]
@@ -17,6 +23,8 @@ public class HeroController : MonoBehaviour
 #region FUnctions Update
     private void Update()
     {
+        _UpdateJumpBuffer();
+
         _entity.SetMoveDirX(GetInputMoveX());
 
         if (_GetInputDownJump())
@@ -24,7 +32,16 @@ public class HeroController : MonoBehaviour
             if (_entity.IsTouchingGround && !_entity.IsJumping)
             {
                 _entity.JumpStart();
-            
+            }else{
+                _ResetJumpBuffer();
+            }
+        }
+
+        if (IsJumpBufferActive())
+        {
+            if (_entity.IsTouchingGround && !_entity.IsJumping)
+            {
+                _entity.JumpStart();
             }
         }
 
@@ -38,8 +55,14 @@ public class HeroController : MonoBehaviour
 
         if (_GetInputDash())
         {
-            _entity.Dash();
+            _entity.DashStart();
         }
+    }
+
+    private void _UpdateJumpBuffer()
+    {
+        if (!IsJumpBufferActive()) return;
+        _jumpBufferTimer += Time.deltaTime;
     }
 #endregion
 #region Functions MoveX
@@ -76,6 +99,22 @@ public class HeroController : MonoBehaviour
         return Input.GetKey(KeyCode.Space);
     }
 #endregion
+#region Functions Jumps Buffer
+    private void _ResetJumpBuffer()
+    {
+        _jumpBufferTimer = 0f;
+    }
+
+    private bool IsJumpBufferActive()
+    {
+        return _jumpBufferTimer < _jumpBufferDuration;
+    }
+
+    private void _CancelJumpBuffer()
+    {
+        _jumpBufferTimer = _jumpBufferDuration;
+    }
+#endregion
 #region Functions DebugGUI
     private void OnGUI()
     {
@@ -83,6 +122,7 @@ public class HeroController : MonoBehaviour
 
         GUILayout.BeginVertical(GUI.skin.box);
         GUILayout.Label(gameObject.name);
+        GUILayout.Label(text:$"Jump Buffer Timer = {_jumpBufferTimer}");
         GUILayout.EndVertical();
     }
 #endregion

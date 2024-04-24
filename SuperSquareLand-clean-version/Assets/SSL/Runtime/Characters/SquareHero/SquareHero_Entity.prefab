@@ -856,13 +856,13 @@ MonoBehaviour:
     deceleration: 7
     turnBackFriction: 100
     speedMax: 6
-  _DashSettings:
-    Speed: 40
-    Duration: 0.1
   _fallSettings:
     fallGravity: 20
     fallSpeedMax: 10
   _groundDetector: {fileID: 4817308626512544918}
+  _DashSettings:
+    Speed: 40
+    Duration: 0.1
   _jumpSettings:
     jumpSpeed: 8
     jumpMinDuration: 0.01
