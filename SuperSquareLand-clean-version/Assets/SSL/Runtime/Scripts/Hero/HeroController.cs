@@ -35,6 +35,11 @@ public class HeroController : MonoBehaviour
                 _entity.StopJumpImpulsion();
             }
         }
+
+        if (_GetInputDash())
+        {
+            _entity.Dash();
+        }
     }
 #endregion
 #region Functions MoveX
@@ -55,11 +60,9 @@ public class HeroController : MonoBehaviour
     }
 #endregion
 #region Functions Dash
-    private void GetInputDash()
+    private bool _GetInputDash()
     {
-        if (Input.GetKeyDown(KeyCode.E)){
-            _entity.Dash();
-        }
+        return Input.GetKeyDown(KeyCode.E);
     }
 #endregion
 #region Functions Jump
