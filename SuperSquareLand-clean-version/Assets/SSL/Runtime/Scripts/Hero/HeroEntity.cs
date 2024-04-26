@@ -57,6 +57,10 @@ public class HeroEntity : MonoBehaviour
     [SerializeField] private Transform _orientVisualRoot;
     private float _orientX = 1f;
 #endregion
+#region Setup Follow camera
+    //Camera Follow
+    private CameraFollowable _cameraFollowable;
+#endregion
 #region Setup Debug
     [Header("Debug")]
     [SerializeField] private bool _guiDebug = false;
@@ -64,6 +68,14 @@ public class HeroEntity : MonoBehaviour
 #endregion
 
 #region Function
+#region Function Awake
+    private void Awake()
+    {
+        _cameraFollowable = GetComponent<CameraFollowable>();
+        _cameraFollowable.FollowPositionX = _rigidbody.position.x;
+        _cameraFollowable.FollowPositionY = _rigidbody.position.y;
+    }
+#endregion
 #region Functions Jump
     public void JumpStart()
     {
@@ -173,6 +185,7 @@ public class HeroEntity : MonoBehaviour
     private void FixedUpdate()
     {
         _ApplyGroundDetection();
+        _UpdateCameraFollowPosition();
 
         HeroHorizontalMovementsSettings horizontalMovementsSettings = _GetCurrentHorizontalMovementsSettings();
         if (_AreOrientAndMovementOpposite())
@@ -245,6 +258,15 @@ public class HeroEntity : MonoBehaviour
 
                 _DashDeplacement();
                 break;
+        }
+    }
+
+    private void _UpdateCameraFollowPosition()
+    {
+        _cameraFollowable.FollowPositionX = _rigidbody.position.x;
+        if (IsTouchingGround && !IsJumping)
+        {
+            _cameraFollowable.FollowPositionY = _rigidbody.position.y;
         }
     }
     #endregion
