@@ -863,6 +863,7 @@ MonoBehaviour:
   _DashSettings:
     Speed: 40
     Duration: 0.1
+    deceleration: 600
   _jumpSettings:
     jumpSpeed: 8
     jumpMinDuration: 0.01

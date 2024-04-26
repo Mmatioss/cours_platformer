@@ -28,7 +28,13 @@ public class HeroEntity : MonoBehaviour
 #region Setup Dash
     [Header("Dash")]
     [SerializeField] private HeroDashSettings _DashSettings;
-    private bool _isDashing = false;
+    private enum DashState
+    {
+        NotDashing,
+        Dashing,
+        EndDash
+    }
+    private DashState _dashState = DashState.NotDashing;
     private float _dashTimer = 0f;
 #endregion
 #region Setup Jump
@@ -142,13 +148,20 @@ public class HeroEntity : MonoBehaviour
 #region Functions Dash 
     public void DashStart()
     {
-        _isDashing = true;
+        _dashState = DashState.Dashing;
         _dashTimer = 0f;
     }
 
     private void _StopDash()
     {
         _horizontalSpeed = 0f;
+    }
+
+    private void _DashDeplacement()
+    {
+        Vector2 velocity = _rigidbody.velocity;
+        velocity.x = _horizontalSpeed;
+        _rigidbody.velocity = velocity;
     }
 #endregion
 #region Functions Update
@@ -180,7 +193,13 @@ public class HeroEntity : MonoBehaviour
                 _ResetVerticalSpeed();
             }
         }
-        _ApplyHorizontalSpeed();
+
+        if (_dashState == DashState.Dashing || _dashState == DashState.EndDash)
+        {
+            _UpdateDash();
+        }else{
+            _ApplyHorizontalSpeed();
+        }
         _ApplyVerticalSpeed();
     }
 
@@ -194,16 +213,38 @@ public class HeroEntity : MonoBehaviour
     #region UpdateDash
     private void _UpdateDash()
     {
-        if (_isDashing)
+        switch(_dashState)
         {
-            _dashTimer += Time.fixedDeltaTime;
-            if (_dashTimer < _DashSettings.Duration)
-            {
-                _horizontalSpeed = _DashSettings.Speed * _orientX;
-            }else{
-                _isDashing = false;
-                _StopDash();
-            }
+            case DashState.Dashing:
+                _dashTimer += Time.fixedDeltaTime;
+                if (_dashTimer < _DashSettings.Duration)
+                {
+                    _horizontalSpeed = _DashSettings.Speed * _orientX;
+                    _DashDeplacement();
+                }else{
+                    _horizontalSpeed = _groundHorizontalMovementsSettings.speedMax ;
+                    _dashState = DashState.EndDash;
+                }
+                break;
+            case DashState.EndDash:
+                _horizontalSpeed -= _DashSettings.deceleration * Time.fixedDeltaTime;
+                if (_orientX<0f)
+                {
+                    if (_horizontalSpeed > 0f)
+                    {
+                        _horizontalSpeed = 0f;
+                        _dashState = DashState.NotDashing;
+                    }
+                }else{
+                    if (_horizontalSpeed < 0f)
+                    {
+                        _horizontalSpeed = 0f;
+                        _dashState = DashState.NotDashing;
+                    }
+                }
+
+                _DashDeplacement();
+                break;
         }
     }
     #endregion
@@ -286,6 +327,7 @@ public class HeroEntity : MonoBehaviour
         GUILayout.Label(text:$"JumpingState = {_jumpState}");
         GUILayout.Label(text:$"Horizontal Speed = {_horizontalSpeed}");
         GUILayout.Label(text:$"Vertical Speed = {_verticalSpeed}");
+        GUILayout.Label(text:$"Dash State = {_dashState}");
         GUILayout.EndVertical();
     }
 #endregion
