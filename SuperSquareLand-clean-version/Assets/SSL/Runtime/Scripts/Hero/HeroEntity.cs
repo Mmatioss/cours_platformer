@@ -42,6 +42,7 @@ public class HeroEntity : MonoBehaviour
     [Header("Jump")]
     [SerializeField] private HeroJumpSettings _jumpSettings;
     [SerializeField] private HeroFallSettings _jumpFallSettings;
+    [SerializeField] private HeroHorizontalMovementsSettings _jumpHorizontalMovementsSettings;
 
     enum JumpState
     {
@@ -156,6 +157,10 @@ public class HeroEntity : MonoBehaviour
 
     private HeroHorizontalMovementsSettings _GetCurrentHorizontalMovementsSettings()
     {
+        if (IsJumping)
+        {
+            return _jumpHorizontalMovementsSettings;
+        }
         return IsTouchingGround ? _groundHorizontalMovementsSettings : _airHorizontalmovementsSettings;
     }
 #endregion

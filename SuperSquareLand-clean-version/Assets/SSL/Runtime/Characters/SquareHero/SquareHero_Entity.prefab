@@ -865,6 +865,10 @@ MonoBehaviour:
     Speed: 40
     Duration: 0.1
     deceleration: 15
+  _DashSettingsAir:
+    Speed: 40
+    Duration: 0.1
+    deceleration: 13
   _jumpSettings:
     jumpSpeed: 8
     jumpMinDuration: 0.01
@@ -872,6 +876,11 @@ MonoBehaviour:
   _jumpFallSettings:
     fallGravity: 60
     fallSpeedMax: 20
+  _jumpHorizontalMovementsSettings:
+    acceleration: 20
+    deceleration: 1
+    turnBackFriction: 200
+    speedMax: 7
   _orientVisualRoot: {fileID: 3024582456938629764}
   _guiDebug: 1
 --- !u!114 &4817308626512544918
