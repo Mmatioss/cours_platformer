@@ -1547,16 +1547,16 @@ MonoBehaviour:
   _profileType: 1
   _targetToFollow: {fileID: 732721623840024185}
   _useDampingHorizontally: 1
-  _horizontalDampingFactor: 5
+  _horizontalDampingFactor: 7
   _useDampingVertically: 1
   _verticalDampingFactor: 5
   _hasBounds: 1
   _boundsRect:
     serializedVersion: 2
-    x: 60
-    y: -5
-    width: 47.5
-    height: 15
+    x: 80
+    y: 95
+    width: 48
+    height: 16
 --- !u!1 &1641381205
 GameObject:
   m_ObjectHideFlags: 0

@@ -172,7 +172,7 @@ public class HeroEntity : MonoBehaviour
     private void _DashDeplacement()
     {
         Vector2 velocity = _rigidbody.velocity;
-        velocity.x = _horizontalSpeed;
+        velocity.x = _horizontalSpeed * _orientX;
         _rigidbody.velocity = velocity;
     }
 #endregion
@@ -232,7 +232,7 @@ public class HeroEntity : MonoBehaviour
                 _dashTimer += Time.fixedDeltaTime;
                 if (_dashTimer < _DashSettings.Duration)
                 {
-                    _horizontalSpeed = _DashSettings.Speed * _orientX;
+                    _horizontalSpeed = _DashSettings.Speed;
                     _DashDeplacement();
                 }else{
                     _horizontalSpeed = _groundHorizontalMovementsSettings.speedMax ;
@@ -240,20 +240,16 @@ public class HeroEntity : MonoBehaviour
                 }
                 break;
             case DashState.EndDash:
-                _horizontalSpeed -= _DashSettings.deceleration * Time.fixedDeltaTime;
                 if (_orientX<0f)
                 {
-                    if (_horizontalSpeed > 0f)
-                    {
-                        _horizontalSpeed = 0f;
-                        _dashState = DashState.NotDashing;
-                    }
+                    _horizontalSpeed -= _DashSettings.deceleration * Time.fixedDeltaTime;
                 }else{
-                    if (_horizontalSpeed < 0f)
-                    {
-                        _horizontalSpeed = 0f;
-                        _dashState = DashState.NotDashing;
-                    }
+                    _horizontalSpeed -= _DashSettings.deceleration * Time.fixedDeltaTime * _orientX;
+                }
+                if (_horizontalSpeed < 0f)
+                {
+                    _horizontalSpeed = 0f;
+                    _dashState = DashState.NotDashing;
                 }
 
                 _DashDeplacement();
