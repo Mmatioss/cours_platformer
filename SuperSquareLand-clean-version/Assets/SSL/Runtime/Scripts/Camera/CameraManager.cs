@@ -16,6 +16,7 @@ public class CameraManager : MonoBehaviour
     private float _profileTransitionStartSize;
     //Follow
     private Vector3 _profileLastFollowDestination;
+    private Vector3 _profileScrollerDestination;
     //Damping
     private Vector3 _dampedPosition;
 
@@ -135,6 +136,11 @@ public class CameraManager : MonoBehaviour
                 _profileLastFollowDestination.y = targetToFollow.FollowPositionY;
                 return _profileLastFollowDestination;
             }
+        }else if (_currentCameraProfile.ProfileType == CameraProfile.CameraProfileType.Scroller)
+        {
+            _profileScrollerDestination.x += _currentCameraProfile.AutoScrollHorizontal;
+            _profileScrollerDestination.y += _currentCameraProfile.AutoScrollVertical;
+            return _profileScrollerDestination ;
         }
         return _currentCameraProfile.Position;
     }

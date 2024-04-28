@@ -34,6 +34,12 @@ public class CameraProfile : MonoBehaviour
     public bool HasBounds => _hasBounds;
     public Rect BoundsRect => _boundsRect;
 
+    [Header("Scroller")]
+    [SerializeField] private float _autoScrollHorizontal = 1f;
+    [SerializeField] private float _autoScrollVertical = 1f;
+
+    public float AutoScrollHorizontal => _autoScrollHorizontal;
+    public float AutoScrollVertical => _autoScrollVertical;
 
 
     
@@ -46,7 +52,8 @@ public class CameraProfile : MonoBehaviour
     public enum CameraProfileType
     {
         Static = 0,
-        FollowTarget
+        FollowTarget,
+        Scroller
     }
 
 

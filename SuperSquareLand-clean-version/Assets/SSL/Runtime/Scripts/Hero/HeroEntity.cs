@@ -28,6 +28,7 @@ public class HeroEntity : MonoBehaviour
 #region Setup Dash
     [Header("Dash")]
     [SerializeField] private HeroDashSettings _DashSettings;
+    [SerializeField] private HeroDashSettings _DashSettingsAir;
     private enum DashState
     {
         NotDashing,
@@ -200,7 +201,7 @@ public class HeroEntity : MonoBehaviour
         {
             _UpdateJump();
         }else{
-            if(!IsTouchingGround)
+            if(!IsTouchingGround && (_dashState != DashState.Dashing))
             {
                 _ApplyFallGravity(_fallSettings);
             }else{
@@ -231,21 +232,46 @@ public class HeroEntity : MonoBehaviour
         {
             case DashState.Dashing:
                 _dashTimer += Time.fixedDeltaTime;
-                if (_dashTimer < _DashSettings.Duration)
+                if (IsTouchingGround)
                 {
-                    _horizontalSpeed = _DashSettings.Speed;
-                    _DashDeplacement();
+                    if (_dashTimer < _DashSettings.Duration)
+                    {
+                        _horizontalSpeed = _DashSettings.Speed;
+                        _DashDeplacement();
+                    }else{
+                        _horizontalSpeed = _groundHorizontalMovementsSettings.speedMax ;
+                        _dashState = DashState.EndDash;
+                    }
+                    break;
                 }else{
-                    _horizontalSpeed = _groundHorizontalMovementsSettings.speedMax ;
-                    _dashState = DashState.EndDash;
+                    if (_dashTimer < _DashSettingsAir.Duration)
+                    {
+                        _horizontalSpeed = _DashSettingsAir.Speed;
+                        _DashDeplacement();
+                    }else{
+                        _horizontalSpeed = _groundHorizontalMovementsSettings.speedMax ;
+                        _dashState = DashState.EndDash;
+                    }
+                    break;
                 }
-                break;
+
             case DashState.EndDash:
                 if (_orientX<0f)
                 {
-                    _horizontalSpeed -= _DashSettings.deceleration * Time.fixedDeltaTime;
+                    if (IsTouchingGround)
+                    {
+                        _horizontalSpeed -= _DashSettings.deceleration * Time.fixedDeltaTime;
+                    }else{
+                        _horizontalSpeed -= _DashSettingsAir.deceleration * Time.fixedDeltaTime;
+                    }
+                    
                 }else{
-                    _horizontalSpeed -= _DashSettings.deceleration * Time.fixedDeltaTime * _orientX;
+                    if (IsTouchingGround)
+                    {
+                        _horizontalSpeed -= _DashSettings.deceleration * Time.fixedDeltaTime * _orientX;
+                    }else{
+                        _horizontalSpeed -= _DashSettingsAir.deceleration * Time.fixedDeltaTime * _orientX;
+                    }
                 }
                 if (_horizontalSpeed < 0f)
                 {
@@ -280,7 +306,7 @@ public class HeroEntity : MonoBehaviour
 
     private void _UpdateJumpStateFalling()
     {
-        if (!IsTouchingGround){
+        if (!IsTouchingGround && _dashState != DashState.Dashing){
             _ApplyFallGravity(_jumpFallSettings);
         }else{
             _ResetVerticalSpeed();

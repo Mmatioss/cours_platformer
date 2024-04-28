@@ -919,6 +919,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _profileType: 0
   _targetToFollow: {fileID: 0}
+  _followOffsetX: 0
+  _FollowOffsetDamping: 0
   _useDampingHorizontally: 0
   _horizontalDampingFactor: 5
   _useDampingVertically: 0
@@ -930,6 +932,8 @@ MonoBehaviour:
     y: 0
     width: 10
     height: 10
+  _autoScrollHorizontal: 1
+  _autoScrollVertical: 1
 --- !u!20 &869992946
 Camera:
   m_ObjectHideFlags: 0
@@ -1546,6 +1550,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _profileType: 1
   _targetToFollow: {fileID: 732721623840024185}
+  _followOffsetX: 3
+  _FollowOffsetDamping: 1.5
   _useDampingHorizontally: 1
   _horizontalDampingFactor: 7
   _useDampingVertically: 1
@@ -1557,6 +1563,8 @@ MonoBehaviour:
     y: 95
     width: 48
     height: 16
+  _autoScrollHorizontal: 0.01
+  _autoScrollVertical: 0
 --- !u!1 &1641381205
 GameObject:
   m_ObjectHideFlags: 0
