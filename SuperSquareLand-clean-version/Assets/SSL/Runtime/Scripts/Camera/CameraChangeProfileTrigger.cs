@@ -29,7 +29,6 @@ public class CameraChangeProfileTrigger : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (!other.CompareTag(TARGET_TAG))return;
-        Debug.Log("Enter Profile");
         CameraManager.Instance.EnterProfile(_cameraProfile, _enterTransition);
     }
 
