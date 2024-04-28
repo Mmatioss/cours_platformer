@@ -126,7 +126,12 @@ public class CameraManager : MonoBehaviour
             if(_currentCameraProfile.TargetToFollow != null)
             {
                 CameraFollowable targetToFollow = _currentCameraProfile.TargetToFollow;
-                _profileLastFollowDestination.x = targetToFollow.FollowPositionX;
+                if (targetToFollow.GetComponent<HeroEntity>().OrientX > 0)
+                {
+                    _profileLastFollowDestination.x = targetToFollow.FollowPositionX + _currentCameraProfile.FollowOffsetX;
+                }else{
+                    _profileLastFollowDestination.x = targetToFollow.FollowPositionX - _currentCameraProfile.FollowOffsetX;
+                }
                 _profileLastFollowDestination.y = targetToFollow.FollowPositionY;
                 return _profileLastFollowDestination;
             }
@@ -141,7 +146,7 @@ public class CameraManager : MonoBehaviour
             _dampedPosition.x = Mathf.Lerp(
                 _dampedPosition.x,
                 position.x,
-                _currentCameraProfile.HorizontalDampingFactor * Time.deltaTime
+                _currentCameraProfile.FollowOffsetDamping * Time.deltaTime 
             );
         }else{
             _dampedPosition.x = position.x;
