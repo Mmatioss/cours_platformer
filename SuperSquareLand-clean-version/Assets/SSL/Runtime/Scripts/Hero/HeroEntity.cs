@@ -25,6 +25,11 @@ public class HeroEntity : MonoBehaviour
     [SerializeField] private GroundDetector _groundDetector;
     public bool IsTouchingGround {get; private set;} = false;
 #endregion
+#region Setup Wall
+    [Header("Wall")]
+    [SerializeField] private WallDetector _wallDetector;
+    public bool IsTouchingWall  {get; private set;} = false;
+#endregion
 #region Setup Dash
     [Header("Dash")]
     [SerializeField] private HeroDashSettings _DashSettings;
@@ -237,6 +242,12 @@ public class HeroEntity : MonoBehaviour
         {
             case DashState.Dashing:
                 _dashTimer += Time.fixedDeltaTime;
+                if (IsTouchingWall)
+                {
+                    _StopDash();
+                    _dashState = DashState.EndDash;
+                    break;
+                }
                 if (IsTouchingGround)
                 {
                     if (_dashTimer < _DashSettings.Duration)
@@ -261,6 +272,12 @@ public class HeroEntity : MonoBehaviour
                 }
 
             case DashState.EndDash:
+                if (IsTouchingWall)
+                {
+                    _StopDash();
+                    _dashState = DashState.EndDash;
+                    break;
+                }
                 if (_orientX<0f)
                 {
                     if (IsTouchingGround)
@@ -358,6 +375,16 @@ public class HeroEntity : MonoBehaviour
     private void _ResetVerticalSpeed()
     {
         _verticalSpeed = 0f;
+    }
+#endregion
+#region Fuctions wall
+    private void _ApplyWallDetection()
+    {
+        IsTouchingWall = _wallDetector.DetectWallNearBy();
+    }
+    private void _ResetHorizontalSpeed()
+    {
+        _horizontalSpeed = 0f;
     }
 #endregion
 #region Functions debugGUI

@@ -289,7 +289,7 @@ GameObject:
   - component: {fileID: 472971580}
   - component: {fileID: 472971579}
   - component: {fileID: 472971582}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: WallRight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -777,7 +777,7 @@ GameObject:
   - component: {fileID: 1641381207}
   - component: {fileID: 1641381206}
   - component: {fileID: 1641381209}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: WallLeft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -966,30 +966,6 @@ PrefabInstance:
     - target: {fileID: 182482925853841835, guid: 58ffc10b51f5a6a4996c22f63f520b49, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6480041685457909243, guid: 58ffc10b51f5a6a4996c22f63f520b49, type: 3}
-      propertyPath: _DashSettingsAir.Speed
-      value: 40
-      objectReference: {fileID: 0}
-    - target: {fileID: 6480041685457909243, guid: 58ffc10b51f5a6a4996c22f63f520b49, type: 3}
-      propertyPath: _DashSettingsAir.Duration
-      value: 0.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6480041685457909243, guid: 58ffc10b51f5a6a4996c22f63f520b49, type: 3}
-      propertyPath: _DashSettingsAir.deceleration
-      value: 13
-      objectReference: {fileID: 0}
-    - target: {fileID: 6480041685457909243, guid: 58ffc10b51f5a6a4996c22f63f520b49, type: 3}
-      propertyPath: _jumpHorizontalMovementsSettings.speedMax
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 6480041685457909243, guid: 58ffc10b51f5a6a4996c22f63f520b49, type: 3}
-      propertyPath: _jumpHorizontalMovementsSettings.deceleration
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6480041685457909243, guid: 58ffc10b51f5a6a4996c22f63f520b49, type: 3}
-      propertyPath: _jumpHorizontalMovementsSettings.turnBackFriction
-      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 6771865885331362632, guid: 58ffc10b51f5a6a4996c22f63f520b49, type: 3}
       propertyPath: m_Name
